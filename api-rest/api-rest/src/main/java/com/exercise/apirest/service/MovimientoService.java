@@ -1,8 +1,9 @@
 package com.exercise.apirest.service;
 
-import com.exercise.apirest.dto.CuentaDTO;
 import com.exercise.apirest.dto.MovimientoDTO;
+import com.exercise.apirest.model.Movimiento;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,8 @@ public interface MovimientoService {
 
     Optional<MovimientoDTO> obtenerMovimientoPorId(Long id);
 
-    MovimientoDTO registrarMovimiento(Long numeroMovimiento, MovimientoDTO movimientoDTO);
+    MovimientoDTO registrarMovimiento(MovimientoDTO movimientoDTO);
 
-    void eliminarMovimiento(Long id);
+    List<Movimiento> obtenerMovimientosPorCuenta(String numeroCuenta, LocalDate fechaInicio,
+        LocalDate fechaFin);
 }

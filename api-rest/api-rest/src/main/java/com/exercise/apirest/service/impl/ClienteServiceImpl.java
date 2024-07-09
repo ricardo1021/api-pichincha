@@ -42,9 +42,10 @@ public class ClienteServiceImpl implements ClienteService {
     public ClienteDTO registrarCliente(ClienteDTO clienteDTO) {
         Cliente cliente = mapToEntity(clienteDTO);
 
-        if (findClienteById(cliente.getIdentificacion())!= null){
+        if (!clienteRepository.findByClienteId(cliente.getClienteId()).isEmpty()) {
             throw new ResourceNotFoundException("El cliente ya existe con este ID no se puede crear uno", 460);
         }
+
 
         cliente = clienteRepository.save(cliente);
         return mapToDTO(cliente);
@@ -75,7 +76,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     }
 
-    private Cliente findClienteById(String id){
+    private Cliente findClienteById(String id) {
         return clienteRepository.findByIdentificacion(id)
             .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado", 461));
     }
@@ -90,6 +91,7 @@ public class ClienteServiceImpl implements ClienteService {
         clienteDTO.setTelefono(cliente.getTelefono());
         clienteDTO.setClienteId(cliente.getClienteId());
         clienteDTO.setContrasena(cliente.getContrasena());
+        clienteDTO.setEstado(cliente.isEstado());
         return clienteDTO;
     }
 

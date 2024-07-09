@@ -2,7 +2,9 @@ package com.exercise.apirest.service.impl;
 
 import com.exercise.apirest.dto.CuentaDTO;
 import com.exercise.apirest.exception.ResourceNotFoundException;
+import com.exercise.apirest.model.Cliente;
 import com.exercise.apirest.model.Cuenta;
+import com.exercise.apirest.repository.ClienteRepository;
 import com.exercise.apirest.repository.CuentaRepository;
 import com.exercise.apirest.service.CuentaService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class CuentaServiceImpl implements CuentaService {
 
 
     private final CuentaRepository cuentaRepository;
+    private final ClienteRepository clienteRepository;
 
     @Override
     public List<CuentaDTO> obtenerCuentas() {
@@ -31,19 +34,30 @@ public class CuentaServiceImpl implements CuentaService {
     }
 
     @Override
-    public Optional<CuentaDTO> obtenerCuentaPorNumero(Long numeroCuenta) {
-        Cuenta cuenta = obtenerCuentaId(numeroCuenta);
+    public Optional<CuentaDTO> obtenerCuentaPorNumero(String numeroCuenta) {
+        Cuenta cuenta = obtenerCuentaNumero(numeroCuenta);
         return Optional.ofNullable(mapToDTO(cuenta));
     }
 
+    private Cuenta obtenerCuentaNumero(String numeroCuenta) {
+        return cuentaRepository.findByNumeroCuenta(numeroCuenta)
+            .orElseThrow(()-> new ResourceNotFoundException("No se encuentra la cuenta solicitada.", 461));
+    }
+
     private Cuenta obtenerCuentaId(Long numeroCuenta) {
-        return cuentaRepository.findById(numeroCuenta)
+        return cuentaRepository.findByNumeroCuenta(numeroCuenta.toString())
             .orElseThrow(()-> new ResourceNotFoundException("No se encuentra la cuenta solicitada.", 461));
     }
 
     @Override
     public CuentaDTO crearCuenta(CuentaDTO cuentaDTO) {
-        Cuenta cuenta = mapToEntity(cuentaDTO);
+
+        Optional<Cliente> cliente = clienteRepository.findByIdentificacion(cuentaDTO.getClienteIdentificacion());
+        if(cliente.isEmpty()){
+            throw new ResourceNotFoundException("El cliente No existe con este ID no se puede registrar una cuenta",
+                                                460);
+        }
+        Cuenta cuenta = mapToEntity(cliente.get(), cuentaDTO);
         cuenta = cuentaRepository.save(cuenta);
         return mapToDTO(cuenta);
     }
@@ -68,20 +82,22 @@ public class CuentaServiceImpl implements CuentaService {
 
     private CuentaDTO mapToDTO(Cuenta cuenta) {
         CuentaDTO cuentaDTO = new CuentaDTO();
-        cuentaDTO.setId(cuenta.getId());
         cuentaDTO.setNumeroCuenta(cuenta.getNumeroCuenta());
         cuentaDTO.setTipoCuenta(cuenta.getTipoCuenta());
         cuentaDTO.setSaldoInicial(cuenta.getSaldoInicial());
         cuentaDTO.setEstado(cuenta.isEstado());
+        cuentaDTO.setClienteIdentificacion(cuenta.getCliente().getIdentificacion());
+        cuentaDTO.setNombreCliente(cuenta.getCliente().getNombre());
         return cuentaDTO;
     }
 
-    private Cuenta mapToEntity(CuentaDTO cuentaDTO) {
+    private Cuenta mapToEntity(Cliente cliente, CuentaDTO cuentaDTO) {
         Cuenta cuenta = new Cuenta();
         cuenta.setNumeroCuenta(cuentaDTO.getNumeroCuenta());
         cuenta.setTipoCuenta(cuentaDTO.getTipoCuenta());
         cuenta.setSaldoInicial(cuentaDTO.getSaldoInicial());
         cuenta.setEstado(cuentaDTO.getEstado());
+        cuenta.setCliente(cliente);
         return cuenta;
     }
 }

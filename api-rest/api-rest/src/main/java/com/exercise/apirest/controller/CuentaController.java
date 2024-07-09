@@ -1,7 +1,6 @@
 package com.exercise.apirest.controller;
 
 import com.exercise.apirest.dto.CuentaDTO;
-import com.exercise.apirest.model.Cuenta;
 import com.exercise.apirest.service.CuentaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +30,7 @@ public class CuentaController {
     }
 
     @GetMapping("/{numeroCuenta}")
-    public ResponseEntity<CuentaDTO> obtenerCuentaPorNumero(@PathVariable Long numeroCuenta) {
+    public ResponseEntity<CuentaDTO> obtenerCuentaPorNumero(@PathVariable String numeroCuenta) {
         Optional<CuentaDTO> cuentaDTO = cuentaService.obtenerCuentaPorNumero(numeroCuenta);
         return cuentaDTO.map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());

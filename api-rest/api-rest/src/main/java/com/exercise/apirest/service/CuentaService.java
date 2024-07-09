@@ -1,7 +1,6 @@
 package com.exercise.apirest.service;
 
 import com.exercise.apirest.dto.CuentaDTO;
-import com.exercise.apirest.model.Cuenta;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +9,7 @@ public interface CuentaService {
 
     List<CuentaDTO> obtenerCuentas();
 
-    Optional<CuentaDTO> obtenerCuentaPorNumero(Long numeroCuenta);
+    Optional<CuentaDTO> obtenerCuentaPorNumero(String numeroCuenta);
 
     CuentaDTO crearCuenta(CuentaDTO cuenta);
 
