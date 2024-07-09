@@ -31,5 +31,5 @@ Sigue los siguientes pasos para configurar y ejecutar la API:
 
 ### Clonar el repositorio
 ```bash
-git clone https://github.com/tu_usuario/api-pichincha.git
+git clone https://github.com/ricardo1021/api-pichincha.git
 cd api-pichincha
