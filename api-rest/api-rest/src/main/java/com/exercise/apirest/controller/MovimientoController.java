@@ -31,27 +31,28 @@ public class MovimientoController {
     }
 
     @GetMapping("/{numeroMovimiento}")
-    public ResponseEntity<CuentaDTO> obtenerCuentaPorNumero(@PathVariable Long numeroMovimiento) {
-        Optional<CuentaDTO> cuentaDTO = cuentaService.obtenerCuentaPorNumero(numeroCuenta);
-        return cuentaDTO.map(ResponseEntity::ok)
+    public ResponseEntity<MovimientoDTO> obtenerCuentaPorNumero(@PathVariable Long numeroMovimiento) {
+        Optional<MovimientoDTO> movimientoDTO = movimientoService.obtenerMovimientoPorId(numeroMovimiento);
+        return movimientoDTO.map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<CuentaDTO> crearCuenta(@RequestBody CuentaDTO cuentaDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(cuentaService.crearCuenta(cuentaDTO));
+    /*@PostMapping
+    public ResponseEntity<MovimientoDTO> crearCuenta(@RequestBody MovimientoDTO movimientoDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(movimientoService.crearCuenta(movimientoDTO));
     }
 
     @PutMapping("/{numeroCuenta}")
-    public ResponseEntity<CuentaDTO> actualizarCuenta(@PathVariable Long numeroCuenta, @RequestBody CuentaDTO cuentaActualizada) {
-        return ResponseEntity.ok(cuentaService.actualizarCuenta(numeroCuenta, cuentaActualizada));
+    public ResponseEntity<MovimientoDTO> actualizarCuenta(@PathVariable Long numeroCuenta,
+        @RequestBody MovimientoDTO movimientoDTO) {
+        return ResponseEntity.ok(movimientoService.actualizarCuenta(numeroCuenta, cuentaActualizada));
     }
 
     @DeleteMapping("/{numeroCuenta}")
     public ResponseEntity<Void> eliminarCuenta(@PathVariable Long numeroCuenta) {
-        cuentaService.eliminarCuenta(numeroCuenta);
+        movimientoService.eliminarCuenta(numeroCuenta);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 
 
 }

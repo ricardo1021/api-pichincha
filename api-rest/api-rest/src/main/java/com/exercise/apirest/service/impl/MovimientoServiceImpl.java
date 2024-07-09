@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,10 +36,15 @@ public class MovimientoServiceImpl implements MovimientoService {
     }
 
     @Override
-    public MovimientoDTO findById(Long id) {
+    public Optional<MovimientoDTO> obtenerMovimientoPorId(Long id) {
+        Movimiento movimiento = obtenerMovimientoId(id);
+        return Optional.of(convertToDTO(movimiento));
+    }
+
+    private Movimiento obtenerMovimientoId(Long id) {
         Movimiento movimiento = movimientoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Movimiento no encontrado con ID: " + id));
-        return convertToDTO(movimiento);
+        return movimiento;
     }
 
     @Override
@@ -70,8 +76,7 @@ public class MovimientoServiceImpl implements MovimientoService {
     @Override
     @Transactional
     public void delete(Long id) {
-        Movimiento movimiento = movimientoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Movimiento no encontrado con ID: " + id));
+        Movimiento movimiento = obtenerMovimientoId(id);
         movimientoRepository.delete(movimiento);
     }
 
