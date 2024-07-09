@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface ClienteService {
 
-    List<ClienteDTO> findAll();
+    List<ClienteDTO> obtenerClientes();
 
-    ClienteDTO obtenerClientePorId(Long id);
+    ClienteDTO obtenerClientePorId(String id);
 
-    ClienteDTO save(ClienteDTO clienteDTO);
+    ClienteDTO registrarCliente(ClienteDTO clienteDTO);
 
-    void eliminarCliente(Long id);
+    void eliminarCliente(String id);
 
-    ClienteDTO actualizarClientePorId(Long clientId, ClienteDTO clienteDTO);
+    ClienteDTO actualizarClientePorId(String clientId, ClienteDTO clienteDTO);
 }

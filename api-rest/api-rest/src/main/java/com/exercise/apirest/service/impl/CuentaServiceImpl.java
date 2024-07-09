@@ -72,7 +72,7 @@ public class CuentaServiceImpl implements CuentaService {
         cuentaDTO.setNumeroCuenta(cuenta.getNumeroCuenta());
         cuentaDTO.setTipoCuenta(cuenta.getTipoCuenta());
         cuentaDTO.setSaldoInicial(cuenta.getSaldoInicial());
-        cuentaDTO.setEstado(cuenta.getEstado());
+        cuentaDTO.setEstado(cuenta.isEstado());
         return cuentaDTO;
     }
 

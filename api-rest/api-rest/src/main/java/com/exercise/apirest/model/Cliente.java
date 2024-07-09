@@ -1,17 +1,18 @@
 package com.exercise.apirest.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 @Entity
+@Getter
+@Setter
 public class Cliente extends Persona {
-
-    private String clienteId;
+    @Column(unique = true)
+    private Long clienteId;
     private String contrasena;
-    private Boolean estado;
+    private boolean estado;
+
 }

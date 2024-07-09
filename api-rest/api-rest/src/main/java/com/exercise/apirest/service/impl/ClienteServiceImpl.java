@@ -6,21 +6,20 @@ import com.exercise.apirest.model.Cliente;
 import com.exercise.apirest.repository.ClienteRepository;
 import com.exercise.apirest.service.ClienteService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-@Transactional
+@AllArgsConstructor
 public class ClienteServiceImpl implements ClienteService {
 
     private final ClienteRepository clienteRepository;
 
     @Override
-    public List<ClienteDTO> findAll() {
+    public List<ClienteDTO> obtenerClientes() {
 
         List<Cliente> clienteList = clienteRepository.findAll();
 
@@ -32,27 +31,34 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public ClienteDTO obtenerClientePorId(Long id) {
+    public ClienteDTO obtenerClientePorId(String id) {
         Cliente cliente = findClienteById(id);
         ClienteDTO clienteDTO = mapToDTO(cliente);
         return clienteDTO;
     }
 
     @Override
-    public ClienteDTO save(ClienteDTO clienteDTO) {
+    @Transactional
+    public ClienteDTO registrarCliente(ClienteDTO clienteDTO) {
         Cliente cliente = mapToEntity(clienteDTO);
+
+        if (findClienteById(cliente.getIdentificacion())!= null){
+            throw new ResourceNotFoundException("El cliente ya existe con este ID no se puede crear uno", 460);
+        }
+
         cliente = clienteRepository.save(cliente);
         return mapToDTO(cliente);
     }
 
     @Override
-    public void eliminarCliente(Long id) {
-        findClienteById(id);
-        clienteRepository.deleteById(id);
+    public void eliminarCliente(String id) {
+        Cliente cliente = findClienteById(id);
+        clienteRepository.deleteById(cliente.getClienteId());
     }
 
     @Override
-    public ClienteDTO actualizarClientePorId(Long clientId, ClienteDTO clienteDTO) {
+    @Transactional
+    public ClienteDTO actualizarClientePorId(String clientId, ClienteDTO clienteDTO) {
 
         Cliente clienteExistente = findClienteById(clientId);
         clienteExistente.setNombre(clienteDTO.getNombre());
@@ -69,8 +75,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     }
 
-    private Cliente findClienteById(Long id){
-        return clienteRepository.findById(id)
+    private Cliente findClienteById(String id){
+        return clienteRepository.findByIdentificacion(id)
             .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado", 461));
     }
 
@@ -84,7 +90,6 @@ public class ClienteServiceImpl implements ClienteService {
         clienteDTO.setTelefono(cliente.getTelefono());
         clienteDTO.setClienteId(cliente.getClienteId());
         clienteDTO.setContrasena(cliente.getContrasena());
-        clienteDTO.setEstado(cliente.getEstado());
         return clienteDTO;
     }
 

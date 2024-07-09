@@ -37,22 +37,16 @@ public class MovimientoController {
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    /*@PostMapping
-    public ResponseEntity<MovimientoDTO> crearCuenta(@RequestBody MovimientoDTO movimientoDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(movimientoService.crearCuenta(movimientoDTO));
-    }
-
-    @PutMapping("/{numeroCuenta}")
-    public ResponseEntity<MovimientoDTO> actualizarCuenta(@PathVariable Long numeroCuenta,
+    @PostMapping("/{numeroMovimiento}")
+    public ResponseEntity<MovimientoDTO> registrarMovimiento(@PathVariable Long numeroMovimiento,
         @RequestBody MovimientoDTO movimientoDTO) {
-        return ResponseEntity.ok(movimientoService.actualizarCuenta(numeroCuenta, cuentaActualizada));
+        return ResponseEntity.ok(movimientoService.registrarMovimiento(numeroMovimiento, movimientoDTO));
     }
 
-    @DeleteMapping("/{numeroCuenta}")
-    public ResponseEntity<Void> eliminarCuenta(@PathVariable Long numeroCuenta) {
-        movimientoService.eliminarCuenta(numeroCuenta);
+    @DeleteMapping("/{numeroMovimiento}")
+    public ResponseEntity<Void> eliminarMovimiento(@PathVariable Long numeroMovimiento) {
+        movimientoService.eliminarMovimiento(numeroMovimiento);
         return ResponseEntity.noContent().build();
-    }*/
-
+    }
 
 }
