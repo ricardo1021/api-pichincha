@@ -5,10 +5,10 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Copia el jar compilado de tu aplicación Spring Boot al contenedor
-COPY target/api-rest-0.0.1-SNAPSHOT.jar api-rest-0.0.1-SNAPSHOT.jar
+COPY target/api-rest-1.0-RELEASE.jar api-rest-1.0-RELEASE.jar
 
 # Expone el puerto 8080 en el contenedor
 EXPOSE 8080
 
 # Comando para ejecutar la aplicación Spring Boot al iniciar el contenedor
-CMD ["java", "-jar", "api-rest-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "api-rest-1.0-RELEASE.jar"]
