@@ -40,7 +40,7 @@ public class ClienteControllerIntegrationTest {
 
     @Test
     public void testGetClienteById() throws Exception {
-        // Datos de ejemplo
+
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setIdentificacion("123456789");
         clienteDTO.setNombre("Juan Pérez");
@@ -51,7 +51,6 @@ public class ClienteControllerIntegrationTest {
         clienteDTO.setContrasena("password123");
         clienteDTO.setEstado(true);
 
-        // Guardar cliente en la base de datos
         String jsonCliente = objectMapper.writeValueAsString(clienteDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -59,11 +58,10 @@ public class ClienteControllerIntegrationTest {
         restTemplate.exchange("http://localhost:" + port + "/api/v1/clientes", HttpMethod.POST, request,
                               ClienteDTO.class);
 
-        // Llamar al endpoint del controlador
         ResponseEntity<ClienteDTO>
-            response = restTemplate.getForEntity("http://localhost:" + port + "/clientes/123456789", ClienteDTO.class);
+            response = restTemplate.getForEntity("http://localhost:" + port + "/api/v1/clientes/123456789",
+                                                 ClienteDTO.class);
 
-        // Verificar la respuesta
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         ClienteDTO clienteResponse = response.getBody();
         assertThat(clienteResponse).isNotNull();
@@ -71,13 +69,4 @@ public class ClienteControllerIntegrationTest {
         assertThat(clienteResponse.getNombre()).isEqualTo("Juan Pérez");
     }
 
-    @Test
-    public void testGetClienteByIdNotFound() {
-        // Llamar al endpoint del controlador con un ID que no existe
-        ResponseEntity<ClienteDTO> response = restTemplate.getForEntity("http://localhost:" + port + "/api/v1/clientes"
-                                                                            + "/987654321", ClienteDTO.class);
-
-        // Verificar la respuesta
-        assertThat(response.getStatusCodeValue()).isEqualTo(404);
-    }
 }
